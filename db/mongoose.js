@@ -1,12 +1,12 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose'
+import dotenv from 'dotenv'
+dotenv.config()
 
 export const dataBaseConnection = mongoose
-  .connect(
-    "mongodb+srv://salmanaziz:salman999@cluster0.gllatbf.mongodb.net/Instagram?retryWrites=true&w=majority"
-  )
+  .connect(process.env.URL)
   .then(() => {
-    console.log("connected to server");
+    console.log('connected to server')
   })
   .catch(() => {
-    console.log("not connected");
-  });
+    console.log('not connected')
+  })

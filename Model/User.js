@@ -21,8 +21,8 @@ const userSchema = new mongoose.Schema({
 		required: true,
 		unique: true,
 		validate: {
-			validator: function (v) {
-				return /^\d{11}$/.test(v)
+			validator: function () {
+				return /^\d{10}$/.test(this.phoneNumber)
 			},
 			message: 'Phone number must be 11 digits'
 		}
@@ -40,7 +40,10 @@ const userSchema = new mongoose.Schema({
 		type: String,
 		trim: true
 	},
-	posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }]
+	posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
+	visibility: {
+		type: Boolean
+	}
 })
 userSchema.pre('save', async function (next) {
 	if (!this.isModified('password')) return next()

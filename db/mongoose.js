@@ -1,5 +1,11 @@
+<<<<<<< HEAD
 import mongoose from "mongoose";
+=======
+import mongoose from 'mongoose'
+import dotenv from 'dotenv'
+>>>>>>> feat: implement story feature endpoints
 
+dotenv.config()
 export const dataBaseConnection = mongoose
   .connect(
     "mongodb+srv://salmanaziz:salman999@cluster0.gllatbf.mongodb.net/Instagram?retryWrites=true&w=majority"

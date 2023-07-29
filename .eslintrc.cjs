@@ -1,7 +1,7 @@
 module.exports = {
 	'env': {
-		'browser': true,
-		'es2021': true
+		'es2021': true,
+		'node': true
 	},
 	'extends': 'eslint:recommended',
 	'overrides': [
@@ -21,10 +21,14 @@ module.exports = {
 		'ecmaVersion': 'latest',
 		'sourceType': 'module'
 	},
+	'ignores': [
+		"!node_modules/",
+		"node_modules/*",
+		"!node_modules/mylibrary/"
+	],
 	'rules': {
 		'indent': [
-			'error',
-			'tab'
+			'error', 'tab'
 		],
 		'linebreak-style': [
 			'error',
@@ -32,11 +36,13 @@ module.exports = {
 		],
 		'quotes': [
 			'error',
-			'single'
+			'double'
 		],
 		'semi': [
 			'error',
 			'never'
-		]
-	}
+		],
+
+
+	},
 }

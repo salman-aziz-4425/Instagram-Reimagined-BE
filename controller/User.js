@@ -1,57 +1,59 @@
 // eslint-disable-next-line no-unused-vars
-import dotenv from 'dotenv'
-import User from '../Model/User.js'
-import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
+import UserService from '../services/user.js'
 
 const UserOperations = {
 	Registeration: async (req, res) => {
-		const user = req.body
 		try {
-			const newUser = new User({
-				username: user.username,
-				fullName: user.fullName,
-				phoneNumber: user.phoneNumber,
-				password: user.password,
-				bio: user.bio || '',
-				posts: user.post || [],
-				profilePictureUrl: user.profilePictureUrl || ''
-			})
-
-			const savedUser = await newUser.save()
+			const user = req.body
+			const savedUser = await UserService.registerUser(user)
 			res.status(201).json(savedUser)
 		} catch (error) {
-			console.error('Error during registration:', error)
-			if (error.name === 'ValidationError' && error.errors) {
-				return res.status(422).json({ error: error.errors })
-			}
 			res.status(500).json({ error: 'Registration failed' })
 		}
+
 	},
 
 	Login: async (req, res) => {
 		const { phoneNumber, password } = req.query
 		try {
-			const user = await User.findOne({ phoneNumber })
-			if (!user) {
-				return res.status(404).json({ error: 'User not found' })
-			}
-			const isPasswordValid = await bcrypt.compare(password, user.password)
-			if (!isPasswordValid) {
-				return res.status(401).json({ error: 'Invalid password' })
-			}
-			// eslint-disable-next-line no-undef
-			const token = jwt.sign({ userId: user._id }, process.env.Secret_KEY, {
-				expiresIn: '1h'
-			})
+			const result = await UserService.loginUser(phoneNumber, password)
 			res.status(200).json({
 				message: 'Login successful',
-				user,
-				token
+				user: result.user,
+				token: result.token
 			})
 		} catch (error) {
-			console.error('Error during login:', error)
 			res.status(500).json({ error: 'Login failed' })
+		}
+	},
+	updateProfilePic: async (req, res) => {
+		const { userId } = req.body
+		try {
+			await UserService.updateProfilePicture(userId, req.files)
+			res.status(200).send('Image uploaded successfully')
+		} catch (error) {
+			res.status(500).send('Image not uploaded')
+		}
+	},
+	searchUser: async (req, res) => {
+		try {
+			const { searchTerm } = req.query
+			if (!searchTerm || searchTerm.trim() === '') {
+				return res.status(400).json({ error: 'Invalid search term' })
+			}
+			const searchResults = await UserService.searchUser(searchTerm)
+			res.json(searchResults)
+		} catch (error) {
+			res.status(500).json({ error: 'Internal Server Error' })
+		}
+	},
+	updatePageVisibility: async (req, res) => {
+		const { userId, visibility } = req.body
+		try {
+			await UserService.updatePageVisibility(userId, visibility)
+			res.status(200).send('Visibility updated')
+		} catch {
+			res.status(500).send('Visibility not updated')
 		}
 	}
 }

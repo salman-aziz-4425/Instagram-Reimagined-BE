@@ -16,13 +16,14 @@ const UserOperations = {
 				password: user.password,
 				bio: user.bio || '',
 				posts: user.post || [],
-				profilePictureUrl: user.profilePictureUrl || ''
+				profilePictureUrl: user.profilePictureUrl || '',
+				followers: [],
+				following: []
 			})
 
 			const savedUser = await newUser.save()
 			res.status(201).json(savedUser)
 		} catch (error) {
-			console.error('Error during registration:', error)
 			if (error.name === 'ValidationError' && error.errors) {
 				return res.status(422).json({ error: error.errors })
 			}
@@ -57,7 +58,6 @@ const UserOperations = {
 				token
 			})
 		} catch (error) {
-			console.error('Error during login:', error)
 			res.status(500).json({ error: 'Login failed' })
 			fs.unlinkSync(req.files.path)
 		}
@@ -76,15 +76,23 @@ const UserOperations = {
 			res.status(500).send('Image not uploaded')
 		}
 	},
-	updatePageVisibility: async (req, res) => {
-		const { userId, visibility } = req.body
+	searchUser: async (req, res) => {
+		const { searchTerm } = req.query
+
+		if (!searchTerm || searchTerm.trim() === '') {
+			return res.status(400).json({ error: 'Invalid search term' })
+		}
+
 		try {
-			const user = await User.findOne({ _id: userId })
-			user.visibility = visibility
-			await user.save()
-			res.status(200).send('visibility updated')
-		} catch {
-			res.status(500).send('visibility not updated')
+			const regex = new RegExp(searchTerm, 'i')
+			const searchResults = await User.find({ username: regex }).populate(
+				'posts'
+			)
+
+			res.json(searchResults)
+		} catch (error) {
+			console.error('Error searching MongoDB:', error)
+			res.status(500).json({ error: 'Internal Server Error' })
 		}
 	}
 }

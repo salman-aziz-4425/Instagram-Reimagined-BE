@@ -16,10 +16,10 @@ const upload = multer({ storage })
 
 router.post('/registerUser', UserOperations.Registeration)
 router.get('/loginUser', UserOperations.Login)
+router.get('/searchUser', UserOperations.searchUser)
 router.put(
 	'/updateProfile',
 	upload.single('image'),
 	UserOperations.updateProfilePic
 )
-router.put('/updateVisibility', UserOperations.updatePageVisibility)
 export default router

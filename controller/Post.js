@@ -29,6 +29,7 @@ const PostOperations = {
 						userId: userId,
 						description,
 						imageUrls: arrayUrls,
+						privateStatus: false,
 						comment: []
 					}
 				],
@@ -78,9 +79,18 @@ const PostOperations = {
 		} catch {
 			res.status(500).send('description not updated')
 		}
-		// const arrayUrls = req.files.map(
-		// 	(image) => 'http://localhost:3000/uploads/' + image.filename
-		// )
+	},
+	updatePostVisibility: async (req, res) => {
+		const { postId, visibility } = req.body
+		console.log(postId)
+		try {
+			const post = await Post.findOne({ _id: postId })
+			post.privateStatus = visibility
+			await post.save()
+			res.status(200).send('visibility updated')
+		} catch {
+			res.status(500).send('visibility not updated')
+		}
 	}
 }
 

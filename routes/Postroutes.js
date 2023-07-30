@@ -16,4 +16,5 @@ const upload = multer({ storage })
 router.post('/addPost', upload.array('images', 5), PostOperations.addPost)
 router.delete('/deletePost', PostOperations.deletePost)
 router.put('/updatePost', upload.array('images', 5), PostOperations.updatePost)
+router.put('/updateVisibility', PostOperations.updatePostVisibility)
 export default router

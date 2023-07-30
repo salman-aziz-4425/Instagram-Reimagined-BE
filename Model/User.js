@@ -43,7 +43,35 @@ const userSchema = new mongoose.Schema({
 	posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
 	visibility: {
 		type: Boolean
-	}
+	},
+	followers: [
+		{
+			user: {
+				type: mongoose.Schema.Types.ObjectId,
+				ref: 'User',
+				required: true
+			},
+			status: {
+				type: String,
+				enum: ['pending', 'accepted', 'rejected'],
+				default: ''
+			}
+		}
+	],
+	following: [
+		{
+			user: {
+				type: mongoose.Schema.Types.ObjectId,
+				ref: 'User',
+				required: true
+			},
+			status: {
+				type: String,
+				enum: ['pending', 'accepted', 'rejected'],
+				default: ''
+			}
+		}
+	]
 })
 userSchema.pre('save', async function (next) {
 	if (!this.isModified('password')) return next()

@@ -71,8 +71,12 @@ const userSchema = new mongoose.Schema({
 				default: ''
 			}
 		}
+	],
+	stories: [
+		{ type: mongoose.Schema.Types.ObjectId, ref: 'Story' }
 	]
 })
+
 userSchema.pre('save', async function (next) {
 	if (!this.isModified('password')) return next()
 

@@ -22,4 +22,5 @@ router.put(
 	upload.single('image'),
 	UserOperations.updateProfilePic
 )
+router.put('/updateVisibility', UserOperations.updatePageVisibility)
 export default router

@@ -36,11 +36,9 @@ const UserOperations = {
 		try {
 			const user = await User.findOne({ phoneNumber }).populate({
 				path: 'posts',
-				populate: {
-					path: 'userId',
-					model: 'User'
-				}
+				populate: [{ path: 'userId', model: 'User' }]
 			})
+
 			if (!user) {
 				return res.status(404).json({ error: 'User not found' })
 			}
@@ -58,8 +56,8 @@ const UserOperations = {
 				token
 			})
 		} catch (error) {
+			console.log(error)
 			res.status(500).json({ error: 'Login failed' })
-			fs.unlinkSync(req.files.path)
 		}
 	},
 	updateProfilePic: async (req, res) => {
@@ -93,6 +91,17 @@ const UserOperations = {
 		} catch (error) {
 			console.error('Error searching MongoDB:', error)
 			res.status(500).json({ error: 'Internal Server Error' })
+		}
+	},
+	updatePageVisibility: async (req, res) => {
+		const { userId, visibility } = req.body
+		try {
+			const user = await User.findOne({ _id: userId })
+			user.visibility = visibility
+			await user.save()
+			res.status(200).send('visibility updated')
+		} catch {
+			res.status(500).send('visibility not updated')
 		}
 	}
 }

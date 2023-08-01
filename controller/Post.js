@@ -1,9 +1,9 @@
 // eslint-disable-next-line no-unused-vars
 import dotenv from 'dotenv'
 import fs from 'fs'
+import mongoose from 'mongoose'
 import Post from '../Model/Post.js'
 import User from '../Model/User.js'
-import mongoose from 'mongoose'
 
 const PostOperations = {
 	addPost: async (req, res) => {
@@ -54,6 +54,17 @@ const PostOperations = {
 			res.status(500).send(error.message)
 		}
 	},
+	getPost: async (req, res) => {
+		const { postId } = req.query
+
+		try {
+			const post = await Post.findOne({ _id: postId }).select('comment likes')
+			console.log(post)
+			res.status(200).send(post)
+		} catch {
+			res.status(500).send([])
+		}
+	},
 	deletePost: async (req, res) => {
 		const { postId } = req.query
 		try {
@@ -82,7 +93,6 @@ const PostOperations = {
 	},
 	updatePostVisibility: async (req, res) => {
 		const { postId, visibility } = req.body
-		console.log(postId)
 		try {
 			const post = await Post.findOne({ _id: postId })
 			post.privateStatus = visibility
@@ -90,6 +100,39 @@ const PostOperations = {
 			res.status(200).send('visibility updated')
 		} catch {
 			res.status(500).send('visibility not updated')
+		}
+	},
+	likepost: async (req, res) => {
+		const { postId, userId } = req.body
+		try {
+			const post = await Post.findOne({ _id: postId })
+			if (!post.likes.includes(userId)) {
+				post.likes.push(userId)
+			} else {
+				post.likes = post.likes.filter((userid) => userid.toString() !== userId)
+			}
+			await post.save()
+			res.status(200)
+		} catch {
+			res.status(500)
+		}
+	},
+	getSpecificPostData: async (req, res) => {
+		const userId = req.query.userId
+
+		try {
+			const userData = await Post.find(
+				{ userId },
+				{ likes: 1, comment: 1 }
+			).exec()
+
+			if (!userData) {
+				return res.status(404).json({ error: 'User data not found' })
+			}
+
+			res.json(userData)
+		} catch (error) {
+			res.status(500).json({ error: 'Internal server error' })
 		}
 	}
 }

@@ -96,7 +96,10 @@ const FollowOperations = {
 			const followingPosts = await Post.find({
 				userId: { $in: followingUsers }
 			})
-				.populate('userId')
+				.populate({
+					path: 'userId',
+					select: 'username profilePictureUrl followers'
+				})
 				.sort({ createdAt: -1 })
 				.exec()
 			res.json(followingPosts)

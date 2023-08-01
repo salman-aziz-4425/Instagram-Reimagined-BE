@@ -1,6 +1,6 @@
 import express from 'express'
 import FollowOperations from '../controller/Follow.js'
-
+// import authenticateToken from '../middleware/middleware.js'
 const router = express.Router()
 
 router.post('/followRequest', FollowOperations.FollowRequest)

@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "lint:fix": "eslint --fix  ./*.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
@@ -16,7 +17,7 @@
   },
   "type": "module",
   "devDependencies": {
-    "eslint": "^8.45.0",
+    "eslint": "^8.46.0",
     "eslint-config-prettier": "^8.9.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.27.5",

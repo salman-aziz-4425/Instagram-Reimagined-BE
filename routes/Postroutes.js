@@ -14,11 +14,12 @@ const storage = multer.diskStorage({
 })
 
 const upload = multer({ storage })
-router.post('/addPost', upload.array('images', 5), PostOperations.addPost)
-router.post('/likePost', PostOperations.likepost)
-router.get('/getPost', authenticateToken, PostOperations.getPost)
-router.get('/specificPostData', PostOperations.getSpecificPostData)
-router.delete('/deletePost', PostOperations.deletePost)
-router.put('/updatePost', upload.array('images', 5), PostOperations.updatePost)
-router.put('/updatePostVisibility', PostOperations.updatePostVisibility)
+
+router.post('/add',authenticateToken, upload.array('images', 5), PostOperations.addPost)
+router.post('/like', PostOperations.likepost)
+router.get('/get', authenticateToken, PostOperations.getPost)
+router.get('/specificpost', PostOperations.getSpecificPostData)
+router.delete('/delete', PostOperations.deletePost)
+router.put('/update', upload.array('images', 5), PostOperations.updatePost)
+router.put('/updatevisibility', PostOperations.updatePostVisibility)
 export default router

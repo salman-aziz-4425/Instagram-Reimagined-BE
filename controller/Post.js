@@ -11,7 +11,6 @@ const PostOperations = {
 		const arrayUrls = req.files.map(
 			(image) => 'http://localhost:3000/uploads/' + image.filename
 		)
-
 		const session = await mongoose.startSession()
 		session.startTransaction()
 
@@ -19,9 +18,6 @@ const PostOperations = {
 			let user = await User.findOne({ _id: userId }).session(session)
 			if (!user) {
 				throw new Error('User not found')
-			}
-			if (user.posts.length > 10) {
-				throw new Error('posts limit exceed')
 			}
 			const post = await Post.create(
 				[
@@ -56,10 +52,8 @@ const PostOperations = {
 	},
 	getPost: async (req, res) => {
 		const { postId } = req.query
-
 		try {
 			const post = await Post.findOne({ _id: postId }).select('comment likes')
-			console.log(post)
 			res.status(200).send(post)
 		} catch {
 			res.status(500).send([])
@@ -102,24 +96,30 @@ const PostOperations = {
 			res.status(500).send('visibility not updated')
 		}
 	},
+
 	likepost: async (req, res) => {
-		const { postId, userId } = req.body
+		const { postId, userId } = req.body;
 		try {
-			const post = await Post.findOne({ _id: postId })
-			if (!post.likes.includes(userId)) {
-				post.likes.push(userId)
-			} else {
-				post.likes = post.likes.filter((userid) => userid.toString() !== userId)
-			}
-			await post.save()
-			res.status(200)
-		} catch {
-			res.status(500)
+		  const post = await Post.findOne({ _id: postId });
+		  const userLikedIndex = post.likesIn.get(userId.toString());
+		  if (userLikedIndex === undefined&&!post.likes.includes(userId)) {
+			post.likes.push(userId);
+			post.likesIn.set(userId.toString(),post.likes.length - 1)
+			await post.save();
+		  } else {
+			  post.likes.splice(userLikedIndex, 1);
+			  delete post.likesIn.delete(userId.toString())
+			  await post.save();
+		  }
+		  res.status(200).json({ success: true });
+		} catch (error) {
+		  console.error(error);
+		  res.status(500).json({ success: false });
 		}
-	},
+	  },
+
 	getSpecificPostData: async (req, res) => {
 		const userId = req.query.userId
-
 		try {
 			const userData = await Post.find(
 				{ userId },

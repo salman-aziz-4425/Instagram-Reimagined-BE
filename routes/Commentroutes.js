@@ -3,8 +3,10 @@ import CommentOperations from '../controller/Comment.js'
 
 const router = express.Router()
 
-router.post('/addComments', CommentOperations.addComment)
-router.get('/getcomments', CommentOperations.getComment)
-router.delete('/deleteComment', CommentOperations.deleteComment)
-router.put('/updateComment', CommentOperations.updateComment)
+router.post('/add', CommentOperations.addComment)
+router.get('/get', CommentOperations.getComment)
+router.delete('/delete', CommentOperations.deleteComment)
+router.put('/update', CommentOperations.updateComment)
 export default router
+
+// naming conventions http

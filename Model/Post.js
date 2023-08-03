@@ -20,7 +20,12 @@ const postSchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
-	likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+	likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User',unique:true }],
+	likesIn:{
+		type: Map,
+		of: Number,
+		default: {},
+	},
 	privateStatus: { type: Boolean, default: false },
 	comment: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
 	createdAt: {

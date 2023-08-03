@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import User from '../Model/User.js'
 import Post from '../Model/Post.js'
-
+import Story from '../Model/Story.js'
 const FollowOperations = {
 	FollowRequest: async (req, res) => {
 		const { senderId, receiverId, status } = req.body
@@ -93,6 +93,7 @@ const FollowOperations = {
 			const followingUsers = loggedInUser.following
 				.filter((follow) => follow.status === 'accepted')
 				.map((follow) => follow.user)
+			followingUsers.push(loggedInUser)
 			const followingPosts = await Post.find({
 				userId: { $in: followingUsers }
 			})
@@ -106,7 +107,31 @@ const FollowOperations = {
 		} catch (error) {
 			res.status(500).json({ error: 'Internal Server Error' })
 		}
-	}
+	},
+	getFollowingStories:async (req, res) => {
+		const loggedInUserId = req.query._id;
+		try {
+		  const loggedInUser = await User.findById({_id:loggedInUserId}).exec();
+		  const followingUsers = loggedInUser.following
+			.filter((follow) => follow.status === 'accepted')
+			.map((follow) => follow.user);
+		  followingUsers.push(loggedInUser);
+		  const followingStories = await Story.find({
+			userId: { $in: followingUsers }
+		  })
+			.populate({
+			  path: 'userId',
+			  select: 'username profilePictureUrl followers'
+			})
+			.sort({ createdAt: -1 })
+			.exec();
+		    const existingUser = followingStories.find((user) => user.userId.toString() === loggedInUserId.toString());
+			console.log(followingStories)
+		  res.json(followingStories);
+		} catch (error) {
+		  res.status(500).json({ error: 'Internal Server Error' });
+		}
+	  }
 }
 
 export default FollowOperations

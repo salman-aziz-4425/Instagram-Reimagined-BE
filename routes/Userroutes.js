@@ -1,6 +1,7 @@
 import express from 'express'
 import multer from 'multer'
 import UserOperations from '../controller/User.js'
+import authenticateToken from '../middleware/middleware.js'
 const router = express.Router()
 
 const storage = multer.diskStorage({
@@ -14,13 +15,14 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage })
 
-router.post('/registerUser', UserOperations.Registeration)
-router.get('/loginUser', UserOperations.Login)
-router.get('/searchUser', UserOperations.searchUser)
+router.post('/register', UserOperations.Registeration)
+router.get('/login', UserOperations.Login)
+router.get('/search',authenticateToken , UserOperations.searchUser)
 router.put(
-	'/updateProfile',
+	'/update',
+	authenticateToken,
 	upload.single('image'),
 	UserOperations.updateProfilePic
 )
-router.put('/updateVisibility', UserOperations.updatePageVisibility)
+router.put('/updatevisibility',authenticateToken , UserOperations.updatePageVisibility)
 export default router

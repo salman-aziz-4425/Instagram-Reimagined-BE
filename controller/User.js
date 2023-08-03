@@ -18,7 +18,8 @@ const UserOperations = {
 				posts: user.post || [],
 				profilePictureUrl: user.profilePictureUrl || '',
 				followers: [],
-				following: []
+				following: [],
+				visibility:false
 			})
 
 			const savedUser = await newUser.save()
@@ -47,7 +48,7 @@ const UserOperations = {
 				return res.status(401).json({ error: 'Invalid password' })
 			}
 			// eslint-disable-next-line no-undef
-			const token = jwt.sign({ userId: user._id }, process.env.Secret_KEY, {
+			const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
 				expiresIn: '1h'
 			})
 			res.status(200).json({
@@ -56,7 +57,6 @@ const UserOperations = {
 				token
 			})
 		} catch (error) {
-			console.log(error)
 			res.status(500).json({ error: 'Login failed' })
 		}
 	},
@@ -89,7 +89,6 @@ const UserOperations = {
 
 			res.json(searchResults)
 		} catch (error) {
-			console.error('Error searching MongoDB:', error)
 			res.status(500).json({ error: 'Internal Server Error' })
 		}
 	},

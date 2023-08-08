@@ -21,7 +21,7 @@ const postSchema = new mongoose.Schema({
 		required: true
 	},
 	likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-	likesIn:{
+	likesIn: {
 		type: Map,
 		of: Number,
 		default: {},
@@ -33,6 +33,9 @@ const postSchema = new mongoose.Schema({
 		default: Date.now
 	}
 })
+
+postSchema.index({ userId: 1, createdAt: -1 })
+postSchema.index({ likes: 1 })
 
 const Post = mongoose.model('Post', postSchema)
 

@@ -17,7 +17,7 @@ const storySchema = new mongoose.Schema({
         required: true
     },
     descriptions: {
-        type:[String],
+        type: [String],
         required: true
     },
     expiryData: {
@@ -25,6 +25,9 @@ const storySchema = new mongoose.Schema({
         default: Date.now() + 24 * 60 * 60 * 1000,
     }
 })
+
+storySchema.index({ userId: 1 })
+storySchema.index({ expiryData: 1 })
 
 const Story = mongoose.model('Story', storySchema)
 

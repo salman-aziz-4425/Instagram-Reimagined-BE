@@ -1,4 +1,4 @@
-import StoryService from '../services/Story.js'
+import StoryService from '../services/stories.services.js'
 
 const storyOperations = {
     addStory: async (req, res) => {
@@ -25,7 +25,7 @@ const storyOperations = {
     deleteStoryItems: async (req, res) => {
         const { storyId, index, userId } = req.query;
         try {
-            await StoryService.deleteStoryItem(storyId, index, userId);
+            await StoryService.deleteStoryItem(storyId, index, userId,req.user.userId);
             res.status(200).json({ message: 'Story deleted successfully' });
         } catch (error) {
             res.status(500).json({ error: error.message });

@@ -16,6 +16,18 @@ const userSchema = new mongoose.Schema({
 		trim: true,
 		maxlength: 100
 	},
+	email: {
+		type: String,
+		required: true,
+		trim: true,
+		unique: true,
+		validate: {
+			validator: (value) => {
+				return /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/.test(value);
+			},
+			message: 'Invalid email format',
+		},
+	},
 	phoneNumber: {
 		type: Number,
 		required: true,
@@ -88,6 +100,7 @@ userSchema.pre('save', async function (next) {
 		next(error)
 	}
 })
+
 const User = mongoose.model('User', userSchema)
 
 export default User

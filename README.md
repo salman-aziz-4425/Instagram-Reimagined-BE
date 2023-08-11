@@ -1,7 +1,7 @@
 # Instructions
 ## Required npm Packages
 ​
-`You can also use package.json to install packages for client and server`
+`You can use package.json to install packages for client and server`
 
 ### - Server
 - express
@@ -39,9 +39,9 @@
 ### - Run
 `docker start containerId
 ​
-### Note
+### - Note
 - Following are the ports being used\
-  `5050` for Server\
+  `8000` for Server\
   `5173` for Client
   
 ## Folder Structure

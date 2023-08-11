@@ -1,21 +1,65 @@
-# Training_proj_BE
+# Instructions
+## Required npm Packages
+​
+`You can also use package.json to install packages for client and server`
 
-# Installation Guide
+### - Server
+- express
+- nodemon
+- cors
+- dotenv
+- mongoose
+- jsonwebtoken
+- multer
+- bcrypt
+- cloudinary
+​
+`npm install express nodemon cors dotenv mongoose jsonwebtoken multer bcrypt cloudinary`
+​
+## Code Execution
+### - Server
+​
+`npm start`
+​
+### - Client
+​
+`cd client && npm run dev`
+​
+## Dockerization
+### - Pre Prequisite
+- Make sure docker and docker desktop is installed.
+- Create docker files for client and server
+​
+### - Build
+`- docker build -t imageName .
 
-
-### Requirements
-- [Nodejs](https://nodejs.org/en/download)
-- [Mongodb](https://www.mongodb.com/docs/manual/administration/install-community/)
-
+### - Port-Forwarding
+- docker run -p HostPort:ContainerPort imageName
+​
+### - Run
+`docker start containerId
+​
+### Note
+- Following are the ports being used\
+  `5050` for Server\
+  `5173` for Client
   
-For Frontend.
-```shell
-cd client
-npm run dev
+## Folder Structure
+The project's folder structure is organized as follows:
+`server/`
+│ ├── `.env/` # all envirnment variables.
+│ ├── `constants/` # Constant values used across the application.
+│ ├── `controllers/` # Controllers for managing data and business logic.
+| ├── `services/` # Services for managing controllers buissness logic.
+│ ├── `middlewares/` # Middleware functions for request processing.
+│ ├── `models/` # Data models and database schema definitions.
+│ ├── `routes/` # API routes and endpoint handlers.
+│ ├── `cloudinary/` # Utility functions for cloudinary.
+│ ├── `middlewares/` # Role based validations and token validations.
+│ ├── `index.js` # Entry point of the application.
 
-```
-For Backend.
-Open another terminal in folder, Also make sure mongodb is running in background.
-```shell
-cd server
-npm run dev
+## Api Endpoints
+- posts/
+- comments
+- followers/
+- users

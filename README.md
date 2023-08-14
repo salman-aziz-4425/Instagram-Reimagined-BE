@@ -45,15 +45,16 @@
   `5173` for Client
   
 ## Folder Structure
-The project's folder structure is organized as follows:
+The project's folder structure as follows:
 `server/`
-│ ├── `.env/` # all envirnment variables.
-│ ├── `constants/` # Constant values used across the application.
+│ ├── `.env/` # Envirnment variables.
+│ ├── `constants/` # Constant routes names.
 │ ├── `controllers/` # Controllers for managing data and business logic.
 | ├── `services/` # Services for managing controllers buissness logic.
-│ ├── `middlewares/` # Middleware functions for request processing.
+│ ├── `middlewares/` # Middleware functions for validations.
 │ ├── `models/` # Data models and database schema definitions.
-│ ├── `routes/` # API routes and endpoint handlers.
+│ ├── `routes/` # API routes.
+│ ├── `utils/` # Utility functions to use across application.
 │ ├── `cloudinary/` # Utility functions for cloudinary.
 │ ├── `middlewares/` # Role based validations and token validations.
 │ ├── `index.js` # Entry point of the application.
@@ -62,4 +63,4 @@ The project's folder structure is organized as follows:
 - posts/
 - comments
 - followers/
-- users
+- users/

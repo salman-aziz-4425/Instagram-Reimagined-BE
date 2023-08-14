@@ -13,6 +13,7 @@
 - multer
 - bcrypt
 - cloudinary
+- nodemailer
 ​
 `npm install express nodemon cors dotenv mongoose jsonwebtoken multer bcrypt cloudinary`
 ​

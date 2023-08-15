@@ -20,7 +20,7 @@
 ## Code Execution
 ### - Server
 ​
-cd server && npm run dev`
+`cd server && npm run dev`
 ​
 ### - Client
 ​
